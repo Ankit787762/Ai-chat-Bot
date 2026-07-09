@@ -23,9 +23,7 @@ MODEL = "llama-3.3-70b-versatile"
 app = FastAPI()
 START = time.time()
 
-# ---------------------------------------------------------------------------
-# In-memory state
-# ---------------------------------------------------------------------------
+
 contexts: dict[tuple[str, str], dict] = {}       # (scope, context_id) -> {version, payload}
 conversations: dict[str, dict] = {}              # conversation_id -> conv state
 sent_suppression_keys: set[str] = set()          # avoid re-firing same trigger family
@@ -37,9 +35,7 @@ def get_ctx(scope: str, context_id: str) -> Optional[dict]:
     return entry["payload"] if entry else None
 
 
-# ---------------------------------------------------------------------------
-# LLM composer
-# ---------------------------------------------------------------------------
+
 SYSTEM_PROMPT = """You are Vera, magicpin's AI marketing assistant, writing a single WhatsApp
 message either TO a merchant, or ON BEHALF OF a merchant TO one of their customers.
 
@@ -107,9 +103,7 @@ def compose_message(category: dict, merchant: dict, trigger: dict,
     }
 
 
-# ---------------------------------------------------------------------------
-# Reply-side logic (auto-reply detection, intent transition, graceful exit)
-# ---------------------------------------------------------------------------
+
 AUTO_REPLY_TIP_OFF = [
     "thank you for contacting", "we will get back to you", "automated assistant",
     "aapki jaankari ke liye", "shukriya", "team tak pahuncha",
@@ -167,9 +161,7 @@ def llm_reply(conv: dict, merchant_message: str, mode: str) -> dict:
     return result
 
 
-# ---------------------------------------------------------------------------
-# Endpoints
-# ---------------------------------------------------------------------------
+
 @app.get("/v1/healthz")
 async def healthz():
     counts = {"category": 0, "merchant": 0, "customer": 0, "trigger": 0}
@@ -334,7 +326,7 @@ async def reply(body: ReplyBody):
     result = llm_reply(conv, body.message, mode=mode)
     new_body = result.get("body", "").strip()
 
-    # anti-repetition guard
+  
     if new_body in conv["bot_messages"]:
         new_body += " "
 
