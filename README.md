@@ -170,8 +170,8 @@ The simulator validates:
 ---
 
 # Deployment
-The application is deployed on **Render**.
-link- https://ai-chat-bot-00cw.onrender.com
+-The application is deployed on **Render**.
+-link- https://ai-chat-bot-00cw.onrender.com
 ---
 
 # Requirements
